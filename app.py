@@ -1,3 +1,12 @@
+import os, json, tempfile
+
+# ⬇️ Place this block at the very top
+gc_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+if gc_json:
+    with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+        f.write(gc_json)
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = f.name
+
 from shopping_agent.shopping_agents import shopping_manager
 from shopping_agent.config_agents import config
 from agents import Runner
