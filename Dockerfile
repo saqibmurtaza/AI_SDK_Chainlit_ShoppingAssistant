@@ -3,8 +3,10 @@ FROM python:3.12
 # Create user
 RUN useradd -m -u 1000 user
 
-# Set environment and switch to the new user
+# Switch to the new user
 USER user
+
+# Set environment
 ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH
 
@@ -14,11 +16,11 @@ WORKDIR $HOME/app
 # Upgrade pip first
 RUN pip install --no-cache-dir --upgrade pip
 
-# ✅ Copy all files AFTER setting workdir — avoids the "not found" error
+# ✅ Copy the whole project into the container
 COPY --chown=user . .
 
-# Install dependencies
+# Install all Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the custom entrypoint script
+# Run using your entrypoint script
 ENTRYPOINT ["/bin/bash", "/home/user/app/docker-entrypoint.sh"]
